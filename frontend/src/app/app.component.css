@@ -1,0 +1,14 @@
+@media (min-width: 768px) {
+    aside {
+      transition: transform 0.3s ease;
+      transform: translateX(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    aside {
+      transition: transform 0.3s ease;
+      transform: translateX(-100%);
+    }
+  }
+  

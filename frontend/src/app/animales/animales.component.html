@@ -1,0 +1,51 @@
+<div class="flex-1 p-10 bg-yellow-100 min-h-screen bg-cover" style="background-image: url('https://example.com/la-granja-de-zenon.jpg'); background-size: cover;">
+  <header class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold mb-4 text-green-800">🌻 Listado de Animales - La Granja de Zenón 🐄</h1>
+  </header>
+  
+  <table class="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+    <thead>
+      <tr class="bg-green-500 text-white font-semibold text-sm uppercase text-center">
+        <th class="py-3 px-6">Id</th>
+        <th class="py-3 px-6">Nombre</th>
+        <th class="py-3 px-6">Edad</th>
+        <th class="py-3 px-6">Acciones</th>
+      </tr>
+    </thead>
+    <tbody class="text-center bg-green-50">
+      <tr *ngFor="let animal of animales" class="border-b border-green-200">
+        <ng-container *ngIf="animalEditando?.id !== animal.id; else editarTemplate">
+          <td class="py-4 px-6">{{ animal.id }}</td>
+          <td class="py-4 px-6">{{ animal.nombre }}</td>
+          <td class="py-4 px-6">{{ animal.edad }}</td>
+          <td class="py-4 px-6 flex justify-center space-x-4">
+            <button (click)="editarAnimal(animal.id)" class="bg-yellow-400 text-white px-3 py-1 rounded-md shadow-md">
+              🐓 Editar
+            </button>
+            <button (click)="borrarAnimal(animal.id)" class="bg-red-400 text-white px-3 py-1 rounded-md shadow-md">
+              🐖 Eliminar
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-template #editarTemplate>
+          <td class="py-4 px-6">{{ animalEditando?.id }}</td>
+          <td class="py-4 px-6">
+            <input [(ngModel)]="animalEditando.nombre" class="border border-green-300 p-1 rounded-md bg-yellow-50"/>
+          </td>
+          <td class="py-4 px-6">
+            <input [(ngModel)]="animalEditando.edad" type="number" class="border border-green-300 p-1 rounded-md bg-yellow-50"/>
+          </td>
+          <td class="py-4 px-6 flex justify-center space-x-4">
+            <button (click)="guardarCambios(animalEditando.id)" class="bg-green-500 text-white px-3 py-1 rounded-md shadow-md">
+              ✔ Guardar
+            </button>
+            <button (click)="cancelarEdicion()" class="bg-gray-500 text-white px-3 py-1 rounded-md shadow-md">
+              ✖ Cancelar
+            </button>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+</div>

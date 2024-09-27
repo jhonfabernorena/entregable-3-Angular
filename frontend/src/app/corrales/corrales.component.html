@@ -1,0 +1,158 @@
+<div class="flex-1 p-10 bg-yellow-100 min-h-screen bg-cover" style="background-image: url('https://example.com/la-granja-de-zenon.jpg')">
+  <!-- Encabezado -->
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+    <h1 class="text-4xl font-bold text-green-900 mb-4 md:mb-0">
+      🐓 Listado de Corrales - La Granja de Zenón 🐄
+    </h1>
+  </header>
+
+  <!-- Botones de agregar -->
+  <div class="flex justify-center space-x-4 mb-6">
+    <button
+      (click)="mostrarFormularioCorral = !mostrarFormularioCorral"
+      class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700 transition duration-200 shadow-md"
+    >
+      ➕ AGREGAR NUEVO CORRAL
+    </button>
+    <button
+      (click)="mostrarFormularioAnimal = !mostrarFormularioAnimal"
+      class="bg-yellow-500 text-white px-5 py-3 rounded-lg hover:bg-yellow-600 transition duration-200 shadow-md"
+    >
+      ➕ AGREGAR NUEVO ANIMAL
+    </button>
+  </div>
+
+  <!-- Formulario para agregar corral -->
+  <div *ngIf="mostrarFormularioCorral" class="mt-4 bg-white shadow-lg p-6 rounded-lg max-w-lg mx-auto border-t-4 border-green-500">
+    <h2 class="text-2xl font-semibold mb-4 text-green-900">🌾 Nuevo Corral</h2>
+    <form (ngSubmit)="agregarNuevoCorral()" #corralForm="ngForm">
+      <label for="nombreCorral" class="block text-lg font-semibold mb-2 text-green-800">Nombre del Corral:</label>
+      <input
+        type="text"
+        id="nombreCorral"
+        name="nombreCorral"
+        [(ngModel)]="nuevoCorral.nombre"
+        required
+        class="border border-green-500 px-4 py-2 mb-4 block w-full rounded-lg bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+
+      <label for="capacidadCorral" class="block text-lg font-semibold mb-2 text-green-800">Capacidad:</label>
+      <input
+        type="number"
+        id="capacidadCorral"
+        name="capacidadCorral"
+        [(ngModel)]="nuevoCorral.capacidad"
+        required
+        class="border border-green-500 px-4 py-2 mb-4 block w-full rounded-lg bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+
+      <div *ngIf="mensajeError" class="text-red-500 mb-4">{{ mensajeError }}</div>
+
+      <button
+        type="submit"
+        class="bg-blue-600 text-white px-5 py-3 rounded-lg w-full hover:bg-blue-700 transition duration-200 shadow-md"
+      >
+        Agregar Corral
+      </button>
+    </form>
+  </div>
+
+  <!-- Formulario para agregar animal -->
+  <div *ngIf="mostrarFormularioAnimal" class="mt-4 bg-white shadow-lg p-6 rounded-lg max-w-lg mx-auto border-t-4 border-yellow-500">
+    <h2 class="text-2xl font-semibold mb-4 text-green-900">🐖 Nuevo Animal</h2>
+    <form (ngSubmit)="agregarAnimalYAsociarloACorral()" #animalForm="ngForm">
+      <label for="nombreAnimal" class="block text-lg font-semibold mb-2 text-green-800">Nombre del Animal:</label>
+      <input
+        type="text"
+        id="nombreAnimal"
+        name="nombreAnimal"
+        [(ngModel)]="nuevoAnimal.nombre"
+        required
+        class="border border-green-500 px-4 py-2 mb-4 block w-full rounded-lg bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+
+      <label for="edadAnimal" class="block text-lg font-semibold mb-2 text-green-800">Edad del Animal:</label>
+      <input
+        type="number"
+        id="edadAnimal"
+        name="edadAnimal"
+        [(ngModel)]="nuevoAnimal.edad"
+        required
+        class="border border-green-500 px-4 py-2 mb-4 block w-full rounded-lg bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+
+      <label for="corralAnimal" class="block text-lg font-semibold mb-2 text-green-800">Selecciona el Corral:</label>
+      <select
+        id="corralAnimal"
+        name="corralAnimal"
+        [(ngModel)]="nuevoAnimal.corralId"
+        required
+        class="border border-green-500 px-4 py-2 mb-4 block w-full rounded-lg bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-green-500"
+      >
+        <option *ngFor="let corral of corrales" [value]="corral.id">
+          {{ corral.nombre }}
+        </option>
+      </select>
+
+      <label for="noCompatibles" class="block text-lg font-semibold mb-2 text-green-800">Selecciona Animales No Compatibles:</label>
+      <select
+        id="noCompatibles"
+        name="noCompatibles"
+        [(ngModel)]="nuevoAnimal.noCompatibles"
+        multiple
+        class="border border-green-500 px-4 py-2 mb-4 block w-full rounded-lg bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-green-500"
+      >
+        <option *ngFor="let animal of animales" [value]="animal.id">
+          {{ animal.nombre }}
+        </option>
+      </select>
+
+      <button
+        type="submit"
+        class="bg-green-600 text-white px-5 py-3 rounded-lg w-full hover:bg-green-700 transition duration-200 shadow-md"
+      >
+        Agregar Animal
+      </button>
+    </form>
+  </div>
+
+  <!-- Tabla de corrales -->
+  <table class="w-full bg-white shadow-md rounded-lg overflow-hidden mt-8 border-t-4 border-green-500">
+    <thead>
+      <tr class="bg-green-100 text-green-900 font-semibold text-sm uppercase text-center">
+        <th class="py-4 px-6">Id</th>
+        <th class="py-4 px-6">Nombre del Corral</th>
+        <th class="py-4 px-6">Cantidad de Animales</th>
+        <th class="py-4 px-6">Edad Promedio</th>
+        <th class="py-4 px-6">Capacidad Total</th>
+        <th class="py-4 px-6">Ver Animales</th>
+        <th class="py-4 px-6">Borrar Corral</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr *ngFor="let corral of corrales" class="border-b">
+        <td class="py-4 px-6">{{ corral.id }}</td>
+        <td class="py-4 px-6">{{ corral.nombre }}</td>
+        <td class="py-4 px-6">{{ corral.cantidadAnimales }}</td>
+        <td class="py-4 px-6">{{ corral.promedioEdad }}</td>
+        <td class="py-4 px-6">{{ corral.capacidad }}</td>
+        <td class="py-4 px-6">
+          <button
+            (click)="verAnimales(corral.id)"
+            class="py-2 px-4 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+          >
+            🐾 Ver Animales
+          </button>
+        </td>
+        <td class="py-4 px-6">
+          <button
+            (click)="borrarCorral(corral.id)"
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 shadow-md"
+          >
+            Borrar Corral
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
